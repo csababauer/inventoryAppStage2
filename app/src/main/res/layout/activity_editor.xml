@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="0dp"
+    tools:context=".EditorActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/lightblue">
+
+        <TextView
+            android:padding="8dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="@style/EditorTheme"
+            android:textColor="@color/colorPrimaryDarkE"
+            android:text="product" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:orientation="vertical"
+            android:paddingLeft="4dp">
+
+            <EditText
+                android:id="@+id/edit_product_name"
+                style="@style/EditorTheme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="name"
+                android:inputType="textCapWords" />
+
+
+            <EditText
+                android:id="@+id/edit_price"
+                style="@style/EditorTheme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="price"
+                android:inputType="number" />
+
+            <EditText
+                android:id="@+id/edit_quantity"
+                style="@style/EditorTheme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="quantity"
+                android:inputType="number"
+                android:maxLength="5" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/container_supplier"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:padding="8dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="@style/EditorTheme"
+            android:textColor="@color/colorPrimaryDarkE"
+            android:text="supplier" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:orientation="vertical"
+            android:paddingLeft="4dp">
+
+            <EditText
+                android:id="@+id/edit_supplier_name"
+                style="@style/EditorTheme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="supplier name"
+                android:inputType="textCapWords" />
+
+            <EditText
+                android:id="@+id/edit_phone_number"
+                style="@style/EditorTheme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="phone number"
+                android:inputType="phone"
+                android:maxLength="10" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>
