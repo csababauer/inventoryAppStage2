@@ -17,4 +17,6 @@
     <string name="sold">sold</string>
     <string name="decrease_error">no item in the inventory</string>
     <string name="main_title">available items</string>
+    <string name="all_fields_required_wanna_quit">all fields are required. Do you want to quit editing?</string>
+    <string name="all_fields_required">all fields are required</string>
 </resources>

@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -88,6 +89,61 @@ public class EditorActivity extends AppCompatActivity implements android.app.Loa
         mQuantity.setOnTouchListener(mTouchListener);
         mSupplierName.setOnTouchListener(mTouchListener);
         mPhoneNumber.setOnTouchListener(mTouchListener);
+
+
+        /**minus button*/
+        Button minus = findViewById(R.id.minus);
+        minus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String quantityString = mQuantity.getText().toString().trim();
+                int quantity = Integer.parseInt(quantityString);
+                if (quantity > 0) {
+                    quantity = Integer.parseInt(quantityString);
+                } else {
+                    Toast.makeText(EditorActivity.this, "quantity must be a valid number", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                mQuantity.setText(String.valueOf(quantity - 1));
+            }
+        });
+        /**plus button*/
+        Button plus = findViewById(R.id.plus);
+        plus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String quantityString = mQuantity.getText().toString().trim();
+                int quantity = Integer.parseInt(quantityString);
+                mQuantity.setText(String.valueOf(quantity + 1));
+            }
+        });
+
+        /**call supplier button*/
+        Button call = findViewById(R.id.call);
+        call.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String number = mPhoneNumber.getText().toString().trim();
+                /**valid phone number definition
+                 * "+" is optional "?" indicate the optionality
+                 * must be 0-9 characters only
+                 * min number is 8, max number is 15*/
+                String validNumber = "^[+]?[0-9]{8,15}$";
+
+                if (number.matches(validNumber)) {
+                    Uri call = Uri.parse("tel:" + number);
+                    Intent intent = new Intent(Intent.ACTION_DIAL, call);
+                    if (intent.resolveActivity(getPackageManager()) != null) {
+                        startActivity(intent);
+                    }
+                    return;
+                } else {
+                    Toast.makeText(EditorActivity.this, "no phone number available", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
     }
 
 
@@ -110,6 +166,15 @@ public class EditorActivity extends AppCompatActivity implements android.app.Loa
             // No need to create ContentValues and no need to do any ContentProvider operations.
             return;
         }
+
+
+        /**all fields are required*/
+        if (TextUtils.isEmpty(nameProduct) || TextUtils.isEmpty(priceString) ||
+                TextUtils.isEmpty(quantityString) || TextUtils.isEmpty(nameSupplier) || TextUtils.isEmpty(phoneString)) {
+            Toast.makeText(this, R.string.all_fields_required, Toast.LENGTH_LONG).show();
+            return;
+        }
+
 
         // Create a ContentValues object where column names are the keys,
         // and item attributes from the editor are the values.
@@ -136,6 +201,7 @@ public class EditorActivity extends AppCompatActivity implements android.app.Loa
             phone = Integer.parseInt(phoneString);
         }
         values.put(InventoryContract.InventoryEntry.COLUMN_SUPPLIER_PHONE, phone);
+
 
         /**Determine if this is a new or existing pet by checking if mCurrentPetUri is null or not*/
         if (mCurrentInventoryUri == null) {
@@ -165,12 +231,15 @@ public class EditorActivity extends AppCompatActivity implements android.app.Loa
     }
 
 
-    /**This adds menu items to the app bar.*/
+    /**
+     * This adds menu items to the app bar.
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_editor, menu);
         return true;
     }
+
     /**
      * This method is called after invalidateOptionsMenu(), so that the
      * menu can be updated (some menu items can be hidden or made visible).
@@ -186,7 +255,9 @@ public class EditorActivity extends AppCompatActivity implements android.app.Loa
         return true;
     }
 
-    /**User clicked on a menu option in the app bar overflow menu*/
+    /**
+     * User clicked on a menu option in the app bar overflow menu
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -220,7 +291,9 @@ public class EditorActivity extends AppCompatActivity implements android.app.Loa
         return super.onOptionsItemSelected(item);
     }
 
-    /**This method is called when the back button is pressed.*/
+    /**
+     * This method is called when the back button is pressed.
+     */
     @Override
     public void onBackPressed() {
         // If the item hasn't changed, continue with handling back button press
@@ -239,10 +312,6 @@ public class EditorActivity extends AppCompatActivity implements android.app.Loa
                 };
         showUnsavedChangesDialog(discardButtonClickListener);
     }
-
-
-
-
 
 
     @Override
@@ -311,12 +380,14 @@ public class EditorActivity extends AppCompatActivity implements android.app.Loa
     }
 
 
-    /**Show a dialog that warns the user there are unsaved changes that will be lost
-     * if they continue leaving the editor.*/
+    /**
+     * Show a dialog that warns the user there are unsaved changes that will be lost
+     * if they continue leaving the editor.
+     */
     private void showUnsavedChangesDialog(
             DialogInterface.OnClickListener discardButtonClickListener) {
         // Create an AlertDialog.Builder and set the message, and click listeners
-        // for the postivie and negative buttons on the dialog.
+        // for the positive and negative buttons on the dialog.
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.unsaved_item);
         builder.setPositiveButton(R.string.discard, discardButtonClickListener);
@@ -358,7 +429,9 @@ public class EditorActivity extends AppCompatActivity implements android.app.Loa
     }
 
 
-    /** Perform the deletion of the pet in the database.*/
+    /**
+     * Perform the deletion of the pet in the database.
+     */
     private void deleteItem() {
         // Only perform the delete if this is an existing pet.
         if (mCurrentInventoryUri != null) {
@@ -377,6 +450,7 @@ public class EditorActivity extends AppCompatActivity implements android.app.Loa
         // Close the activity
         finish();
     }
+
 
 }
 

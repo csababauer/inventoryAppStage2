@@ -4,7 +4,7 @@ import android.content.ContentResolver;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-public class InventoryContract {
+public final class InventoryContract {
 
     private InventoryContract() {
     }
