@@ -34,6 +34,14 @@ public class EditorActivity extends AppCompatActivity implements android.app.Loa
     private EditText mSupplierName;
     private EditText mPhoneNumber;
 
+    private String nameProduct;
+    private String priceString;
+    private String quantityString;
+    private String nameSupplier;
+    private String phoneString;
+
+    int quantity;
+
     /**
      * Boolean flag that keeps track of whether the pet has been edited (true) or not (false)
      */
@@ -54,6 +62,7 @@ public class EditorActivity extends AppCompatActivity implements android.app.Loa
 
 
         setTitle(getString(R.string.edit_item));
+
 
         //get data from Catalog activity
         Intent intent = getIntent();
@@ -97,7 +106,14 @@ public class EditorActivity extends AppCompatActivity implements android.app.Loa
             @Override
             public void onClick(View view) {
                 String quantityString = mQuantity.getText().toString().trim();
-                int quantity = Integer.parseInt(quantityString);
+
+                /**if quantity textfield is empty make quantity 0 and send a toast message below */
+                if (TextUtils.isEmpty(quantityString)) {
+                    quantity = 0;
+                } else {
+                    quantity = Integer.parseInt(quantityString);
+                }
+
                 if (quantity > 0) {
                     quantity = Integer.parseInt(quantityString);
                 } else {
@@ -113,7 +129,13 @@ public class EditorActivity extends AppCompatActivity implements android.app.Loa
             @Override
             public void onClick(View view) {
                 String quantityString = mQuantity.getText().toString().trim();
-                int quantity = Integer.parseInt(quantityString);
+
+                /**checking if quantity textfield is empty */
+                if (TextUtils.isEmpty(quantityString)) {
+                    quantity = 0;
+                } else {
+                    quantity = Integer.parseInt(quantityString);
+                }
                 mQuantity.setText(String.valueOf(quantity + 1));
             }
         });
@@ -151,11 +173,12 @@ public class EditorActivity extends AppCompatActivity implements android.app.Loa
 
         // Read from input fields
         // Use trim to eliminate leading or trailing white space
-        String nameProduct = mProductName.getText().toString().trim();
-        String priceString = mPrice.getText().toString().trim();
-        String quantityString = mQuantity.getText().toString().trim();
-        String nameSupplier = mSupplierName.getText().toString().trim();
-        String phoneString = mPhoneNumber.getText().toString().trim();
+        nameProduct = mProductName.getText().toString().trim();
+        priceString = mPrice.getText().toString().trim();
+        quantityString = mQuantity.getText().toString().trim();
+        nameSupplier = mSupplierName.getText().toString().trim();
+        phoneString = mPhoneNumber.getText().toString().trim();
+
 
         // Check if this is supposed to be a new item
         // and check if all the fields in the editor are blank
@@ -164,14 +187,6 @@ public class EditorActivity extends AppCompatActivity implements android.app.Loa
                 TextUtils.isEmpty(quantityString) && TextUtils.isEmpty(nameSupplier) && TextUtils.isEmpty(phoneString)) {
             // Since no fields were modified, we can return early without creating a new item.
             // No need to create ContentValues and no need to do any ContentProvider operations.
-            return;
-        }
-
-
-        /**all fields are required*/
-        if (TextUtils.isEmpty(nameProduct) || TextUtils.isEmpty(priceString) ||
-                TextUtils.isEmpty(quantityString) || TextUtils.isEmpty(nameSupplier) || TextUtils.isEmpty(phoneString)) {
-            Toast.makeText(this, R.string.all_fields_required, Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -228,6 +243,7 @@ public class EditorActivity extends AppCompatActivity implements android.app.Loa
                 Toast.makeText(this, R.string.insert_item_successful, Toast.LENGTH_SHORT).show();
             }
         }
+
     }
 
 
@@ -263,10 +279,37 @@ public class EditorActivity extends AppCompatActivity implements android.app.Loa
 
         switch (item.getItemId()) {
             case R.id.action_save:
+
+                /**check if item has all the fields*/
+                // Read from input fields
+                // Use trim to eliminate leading or trailing white space
+                nameProduct = mProductName.getText().toString().trim();
+                priceString = mPrice.getText().toString().trim();
+                quantityString = mQuantity.getText().toString().trim();
+                nameSupplier = mSupplierName.getText().toString().trim();
+                phoneString = mPhoneNumber.getText().toString().trim();
+
+                if ((TextUtils.isEmpty(nameProduct) ||
+                        TextUtils.isEmpty(priceString) ||
+                        TextUtils.isEmpty(quantityString) ||
+                        TextUtils.isEmpty(nameSupplier) ||
+                        TextUtils.isEmpty(phoneString)))
+                {
+                    DialogInterface.OnClickListener discardButtonClickListener =
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    NavUtils.navigateUpFromSameTask(EditorActivity.this);
+                                }
+                            };
+
+                    showUnsavedChangesDialog(discardButtonClickListener);
+                    return true;
+                } else {
                 saveItem();
                 /**exit activity and jump back to catalog activity*/
                 finish();
-                return true;
+                return true;}
             case R.id.action_delete:
                 /** Pop up confirmation dialog for deletion*/
                 showDeleteConfirmationDialog();

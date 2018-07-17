@@ -4,7 +4,7 @@
     <string name="missing_field">Edit all fields</string>
     <string name="insert_item_failed">saving failed</string>
     <string name="insert_item_successful">saved</string>
-    <string name="unsaved_item">quit editing?</string>
+    <string name="unsaved_item">all fields are required. quit editing?</string>
     <string name="discard">discard</string>
     <string name="keep_editing">keep editing</string>
     <string name="delete_msg">do you want to delete this item?</string>
